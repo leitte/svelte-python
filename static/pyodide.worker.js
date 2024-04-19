@@ -30,7 +30,6 @@ onmessage = async (event) => {
     postMessage({result, id});
   } 
   catch(error) {
-    console.log("got error in pyodide", error.message)
-    postMessage({ error: error.message, id });
+    setTimeout(function() { throw error; }); 
   }
 };

@@ -23,13 +23,19 @@ result = {'a': a}
         // what to do when the worker is finished
         pyodideWorker.onmessage = function (event) {
             const { id, ...data } = event.data;
-            const onSuccess = callbacks[id];
+            const onSuccess = callbacks[id].onSuccess;
             delete callbacks[id];
             callbacks = callbacks;
             onSuccess(data);
             result = data.result;
-            console.log("result", result);
         };
+        pyodideWorker.onerror = function (event) {
+            const onReject = callbacks[id].onReject;
+            delete callbacks[id];
+            callbacks = callbacks;
+            onReject(event)
+            result = "Error";
+        }
         workerAvailable = true;
         runPythonCode("");
     });
@@ -37,9 +43,9 @@ result = {'a': a}
     let currentComputationPromise;
 
     async function runPythonCode(script) {
-        currentComputationPromise = new Promise((onSuccess) => {
+        currentComputationPromise = new Promise((onSuccess, onReject) => {
             id = (id + 1) % Number.MAX_SAFE_INTEGER;
-            callbacks[id] = onSuccess;
+            callbacks[id] = {onSuccess, onReject};
             pyodideWorker.postMessage({ script, id });
         });
     }
@@ -74,6 +80,8 @@ result = {'a': a}
             Running python code...
         {:then currResult} 
             Result from promise: {(typeof currResult.result === 'object') ? JSON.stringify(currResult.result): currResult.result}
+        {:catch error}
+            <pre>{error.message}</pre>
         {/await}
         
 
