@@ -18,7 +18,6 @@ result = {'a': a}
     let id = 0;
 
     onMount(async () => {
-        //pyodideWorker = new MyWorker();
         pyodideWorker = new Worker("pyodide.worker.js");
         // what to do when the worker is finished
         pyodideWorker.onmessage = function (event) {
