@@ -92,7 +92,10 @@ result = {'a': a}
     {:else}
         Waiting for python.
     {/if}
+</div>
 
+
+<div style:flex="1"></div>
 <h3 style:margin-top="50px">Details</h3>
 <p>
 
@@ -108,7 +111,6 @@ result = {'a': a}
     number of pending jobs is displayed below (Number of waiting scripts). Set 
     the sleep function in the python script to try this effect (time is measured in seconds).
 </p>
-</div>
 
 <p>
     Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
