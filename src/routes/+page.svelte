@@ -56,14 +56,19 @@ result = {'a': a}
 
 <p>
     Enter python code in the text area below and press the 
-    <span class="text-button">Run Python</span> button. 
+    <span class="text-button">Run Python</span> button or use 
+    <span class="text-button">shift</span> + <span class="text-button">enter</span> 
+    on the keyboard. 
     This will run the python script using <a href="https://pyodide.org">pyodide</a>. The contents of 
     the variable <code>result</code> is returned to the website and displayed 
     once it's finished. 
 </p>
     
 
-    <textarea bind:value={script} style="height: 100px"/>
+    <textarea bind:value={script} 
+        on:keydown={(event) => (event.keyCode == 13 && event.shiftKey) ? runPythonCode(script) : "" } 
+        style="height: 100px"
+    />
 
     {#if workerAvailable}
         We are set up! 
