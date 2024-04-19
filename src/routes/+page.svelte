@@ -81,7 +81,7 @@ result = {'a': a}
         {:then currResult} 
             Result from promise: {(typeof currResult.result === 'object') ? JSON.stringify(currResult.result): currResult.result}
         {:catch error}
-            <pre>{error.message}</pre>
+            <pre style:font-size="80%">{error.message}</pre>
         {/await}
         
 
