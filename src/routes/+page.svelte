@@ -2,10 +2,11 @@
     import { onMount } from "svelte";
 
     let script = `import time
-    a = 5 + 3
-    time.sleep(0)
-    result = {'a': a}
-    `;
+time.sleep(0)
+
+a = 5 + 3
+result = {'a': a}
+`;
 
     let pyodideWorker;
     let workerAvailable = false;
@@ -44,9 +45,18 @@
     }
 </script>
 
-<h1>Welcome to Svelte+Pyodide</h1>
-
 <div class="wrapper">
+    <h1>Welcome to Svelte+Pyodide</h1>
+
+<p>
+    Enter python code in the text area below and press the 
+    <span class="text-button">Run Python</span> button. 
+    This will run the python script using <a href="https://pyodide.org">pyodide</a>. The contents of 
+    the variable <code>result</code> is returned to the website and displayed 
+    once it's finished. 
+</p>
+    
+
     <textarea bind:value={script} style="height: 100px"/>
 
     {#if workerAvailable}
@@ -68,10 +78,28 @@
         
 
         <span>Number of waiting scripts: {nCallbacks}</span>
+        <!--
         <span>Current computation: {currentComputationPromise}</span>
+        -->
     {:else}
         Waiting for python.
     {/if}
+
+<h3 style:margin-top="50px">Details</h3>
+<p>
+
+    The script is computed in a separate thread using <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">Web Workers</a>.
+    This means that heavy computations are done in the background and
+    the website gets notified once the result is available. 
+    We use two strategies for updates: 
+    <a href="https://learn.svelte.dev/tutorial/dynamic-attributes">svelte's dynamic attributes</a> and
+    <a href="https://learn.svelte.dev/tutorial/await-blocks">promises + await-blocks</a>. <br/>
+
+    You can start
+    multiple scripts and they will be computed one after the other. The 
+    number of pending jobs is displayed below (Number of waiting scripts). Set 
+    the sleep function in the python script to try this effect (time is measured in seconds).
+</p>
 </div>
 
 <p>
@@ -83,6 +111,12 @@
         display: flex;
         flex-direction: column;
         gap: 15px;
-        max-width: 40rem;
+        max-width: auto;
+    }
+
+    .text-button {
+        border: 1px solid gray;
+        border-radius: 3px;
+        padding: 2px 5px;
     }
 </style>
